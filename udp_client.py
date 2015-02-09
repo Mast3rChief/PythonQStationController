@@ -1,4 +1,5 @@
 import socket
+import sys
 import json
 
 
@@ -11,17 +12,18 @@ class UdpClient:
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             sock.sendto(cmd, (self.__ip, self.__port))
-            data = sock.recvfrom(1024)
+            data = sock.recvfrom(2048)
 
             print 'Command: ' + cmd
             print 'Answer: ' + data[0]
 
             return data[0]
-        except ValueError:
-            pass
+        except:
+            print "UDP Connection Error: ", sys.exc_info()[0]
+            raise
 
     def set_light(self, bright, red, green, blue, active_bulb):
-        cmd = '{"cmd":"light_ctrl","bright":"' + str(bright) + '","g":"' + str(green) + '","model":"6","b":"' + str(blue) + '","effect":"9","r":"' + str(red) + '","sn_list":[{"sn":"' + active_bulb + '"}],"matchValue":"0","isSwitch":"1"}'
+        cmd = '{"cmd":"light_ctrl","bright":"' + str(bright) + '","g":"' + str(green) + '","b":"' + str(blue) + '","effect":"9","r":"' + str(red) + '","sn_list":[{"sn":"' + active_bulb + '"}],"matchValue":"0","iswitch":"1"}'
 
         data = self.send_request(cmd)
 
@@ -29,6 +31,24 @@ class UdpClient:
         cmd = '{"cmd":"light_list"}'
 
         data = self.send_request(cmd)
-        json_data = json.loads(data)
 
-        return json_data
+        try:
+            json_data = json.loads(data)
+
+            return json_data
+        except:
+            print "JSON Parsing Error: ", sys.exc_info()[0]
+            raise
+
+    def set_title(self, sn, title):
+        cmd = '{"cmd":"set_title","sn":"' + sn + '","title":"' + title + '"}'
+
+        data = self.send_request(cmd)
+
+        try:
+            json_data = json.loads(data)
+
+            return json_data
+        except:
+            print "JSON Parsing Error: ", sys.exc_info()[0]
+            raise

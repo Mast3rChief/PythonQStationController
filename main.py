@@ -1,10 +1,11 @@
 from Tkinter import *
 from udp_client import *
+import ttk
 
 
 def callback_bright():
     udp_client = UdpClient(ip.get(), 11600)
-    udp_client.set_light(bright.get(), red.get(), green.get(), blue.get(), bulb.get())
+    udp_client.set_light(bright.get(), red.get(), green.get(), blue.get(), active_bulb.get())
 
 
 def callback_ping():
@@ -17,7 +18,13 @@ def callback_ping():
         else:
             seperator = ', '
 
-        bulb.set(bulb.get() + seperator + response['led'][i]['sn'])
+        bulb.set(bulb.get() + ' ' +response['led'][i]['sn'])
+        bulb_select['values']
+    bulb_select['values'] = bulb.get()
+    print bulb_select['values']
+
+def callback_select(event):
+    print active_bulb.get()
 
 root = Tk()
 root.title("Python Q Station Control")
@@ -30,13 +37,16 @@ mainframe.rowconfigure(0, weight=1)
 ip = StringVar()
 bulb = StringVar()
 
-ip.set('188.166.7.41')
+ip.set('192.168.178.97')
 
 ip_entry = Entry(mainframe, textvariable=ip)
 ip_entry.grid(column=2, row=1, sticky=(W, E))
 
-bulb_entry = Entry(mainframe, textvariable=bulb)
-bulb_entry.grid(column=2, row=2, sticky=(W, E))
+active_bulb = StringVar()
+bulb_select = ttk.Combobox(mainframe, textvariable=active_bulb)
+bulb_select.grid(column=2, row=2, sticky=(W, E))
+bulb_select['values'] = ('No Bulbs')
+bulb_select.bind("<<ComboboxSelected>>", callback_select)
 
 bright = Scale(mainframe, from_=0, to=100, orient=HORIZONTAL)
 bright.set(0)
@@ -54,14 +64,14 @@ blue = Scale(mainframe, from_=0, to=255, orient=HORIZONTAL)
 blue.set(0)
 blue.grid(column=2, row=6, sticky=(N, W, E, S))
 
-Button(mainframe, text="Set Brightness", command=callback_bright).grid(column=2, row=7, sticky=W)
-Button(mainframe, text="Get Bulbs", command=callback_ping).grid(column=1, row=7, sticky=W)
+Button(mainframe, text="Set", command=callback_bright).grid(column=2, row=7, sticky=(W,E))
+Button(mainframe, text="Get Bulbs", command=callback_ping).grid(column=1, row=7, sticky=(W,E))
 
 Label(mainframe, text="Q Station IP").grid(column=1, row=1, sticky=W)
 Label(mainframe, text="Bulb").grid(column=1, row=2, sticky=W)
 Label(mainframe, text="Brightness").grid(column=1, row=3, sticky=W)
-Label(mainframe, text="Green").grid(column=1, row=4, sticky=W)
-Label(mainframe, text="Red").grid(column=1, row=5, sticky=W)
+Label(mainframe, text="Red").grid(column=1, row=4, sticky=W)
+Label(mainframe, text="Green").grid(column=1, row=5, sticky=W)
 Label(mainframe, text="Blue").grid(column=1, row=6, sticky=W)
 
 for child in mainframe.winfo_children():
