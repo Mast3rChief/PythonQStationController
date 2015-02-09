@@ -23,11 +23,7 @@ class UdpClient:
             raise
 
     def set_light(self, bright, red, green, blue, active_bulb):
-<<<<<<< HEAD
         cmd = '{"cmd":"light_ctrl","bright":"' + str(bright) + '","g":"' + str(green) + '","b":"' + str(blue) + '","effect":"9","r":"' + str(red) + '","sn_list":[{"sn":"' + active_bulb + '"}],"matchValue":"0","iswitch":"1"}'
-=======
-        cmd = '{"cmd":"light_ctrl","bright":"' + str(bright) + '","g":"' + str(green) + '","model":"6","b":"' + str(blue) + '","effect":"9","r":"' + str(red) + '","sn_list":[{"sn":"' + active_bulb + '"}],"matchValue":"0","iswitch":"1"}'
->>>>>>> FETCH_HEAD
 
         data = self.send_request(cmd)
 
@@ -36,7 +32,6 @@ class UdpClient:
 
         data = self.send_request(cmd)
 
-<<<<<<< HEAD
         try:
             json_data = json.loads(data)
 
@@ -57,6 +52,3 @@ class UdpClient:
         except:
             print "JSON Parsing Error: ", sys.exc_info()[0]
             raise
-=======
-        return json_data
->>>>>>> FETCH_HEAD
