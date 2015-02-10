@@ -56,7 +56,7 @@ class App:
         self.root.mainloop()
 
     def callback_bright_scale(self):
-        if self.bulb_treeview.selection() != '' and self.bulb_treeview.selection()[0] != 'widgets':
+        if self.bulb_treeview.selection() != '' and self.bulb_treeview.selection()[0] != 'bulbs':
             udp_client = UdpClient(self.ip.get(), 11600)
             udp_client.set_light(self.bright_scale.get(), self.red_scale.get(), self.green_scale.get(), self.blue_scale.get(), self.bulb_treeview.item(self.bulb_treeview.selection()[0], 'tag')[0])
     
@@ -66,17 +66,17 @@ class App:
             response = udp_client.get_lights()
 
             map(self.bulb_treeview.delete, self.bulb_treeview.get_children())
-            self.bulb_treeview.insert('', 'end', 'widgets', text='Q Station')
+            self.bulb_treeview.insert('', 'end', 'bulbs', text='Q Station', open=True)
 
             for i in range(len(response['led'])):
-                self.bulb_treeview.insert('widgets', 'end', text=response['led'][i]['title'], tag=response['led'][i]['sn'])
+                self.bulb_treeview.insert('bulbs', 'end', text=response['led'][i]['title'], tag=response['led'][i]['sn'])
         else:
             showerror('Error', 'Please fill in the Q Station IP first.')
 
     def callback_bulb_treeview(self, event):
         item = self.bulb_treeview.selection()[0]
     
-        if item != 'widgets':
+        if item != 'bulbs':
             print self.bulb_treeview.item(item, 'tag')[0]
 
 if __name__ == '__main__':
