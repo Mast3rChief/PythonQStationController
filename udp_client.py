@@ -14,12 +14,12 @@ class UdpClient:
             sock.sendto(cmd, (self.ip, self.port))
             data = sock.recvfrom(1024)
 
-            print 'Command: ' + cmd
-            print 'Answer: ' + data[0]
+            print('Command: ' + cmd)
+            print('Answer: ' + data[0])
 
             return data[0]
         except:
-            print 'UDP Connection Error: ', sys.exc_info()[0]
+            print('UDP Connection Error: ', sys.exc_info()[0])
             raise
 
     def set_light(self, bright, red, green, blue, active_bulb):
@@ -37,7 +37,7 @@ class UdpClient:
 
             return json_data
         except:
-            print 'JSON Parsing Error: ', sys.exc_info()[0]
+            print('JSON Parsing Error: ', sys.exc_info()[0])
             raise
 
     def set_title(self, sn, title):
@@ -50,5 +50,5 @@ class UdpClient:
 
             return json_data
         except:
-            print 'JSON Parsing Error: ', sys.exc_info()[0]
+            print('JSON Parsing Error: ', sys.exc_info()[0])
             raise

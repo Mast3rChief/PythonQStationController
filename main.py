@@ -79,7 +79,7 @@ class App:
         item = self.bulb_treeview.selection()[0]
     
         if item != 'bulbs':
-            print self.bulb_treeview.item(item, 'tag')[0]
+            print(self.bulb_treeview.item(item, 'tag')[0])
 
 if __name__ == '__main__':
     app = App()
