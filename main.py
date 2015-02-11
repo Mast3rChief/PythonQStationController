@@ -39,8 +39,8 @@ class App:
         self.blue_scale.set(0)
         self.blue_scale.grid(column=2, row=5, sticky=(N, W, E, S))
 
-        Button(self.mainframe, text='Set Values', command=self.callback_bright_scale).grid(column=2, row=6, sticky=(W,E))
-        Button(self.mainframe, text='Get bulbs from Q Station', command=self.callback_ping).grid(column=0, row=6, sticky=(W,E))
+        Button(self.mainframe, text='Set Values', command=self.callback_set_values).grid(column=2, row=6, sticky=(W,E))
+        Button(self.mainframe, text='Get bulbs from Q Station', command=self.callback_get_bulbs).grid(column=0, row=6, sticky=(W,E))
 
         Label(self.mainframe, text='Q Station IP').grid(column=1, row=1, sticky=W)
         Label(self.mainframe, text='Brightness').grid(column=1, row=2, sticky=W)
@@ -55,12 +55,14 @@ class App:
 
         self.root.mainloop()
 
-    def callback_bright_scale(self):
+    def callback_set_values(self):
         if self.bulb_treeview.selection() != '' and self.bulb_treeview.selection()[0] != 'bulbs':
             udp_client = UdpClient(self.ip.get(), 11600)
             udp_client.set_light(self.bright_scale.get(), self.red_scale.get(), self.green_scale.get(), self.blue_scale.get(), self.bulb_treeview.item(self.bulb_treeview.selection()[0], 'tag')[0])
+        else:
+            showinfo('Info', 'Please select the bulb you want to control.')
     
-    def callback_ping(self):
+    def callback_get_bulbs(self):
         if self.ip.get() != '':
             udp_client = UdpClient(self.ip.get(), 11600)
             response = udp_client.get_lights()
