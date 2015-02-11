@@ -12,7 +12,7 @@ class UdpClient:
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             sock.sendto(cmd, (self.ip, self.port))
-            data = sock.recvfrom(1024)
+            data = sock.recvfrom(2048)
 
             print('Command: ' + cmd)
             print('Answer: ' + data[0])
