@@ -43,8 +43,12 @@ class App:
         self.bright_scale.set(0)
         self.bright_scale.grid(column=2, row=3, sticky=(N, W, E, S))
 
-        Button(self.mainframe, text='Set Values', command=self.callback_set_values).grid(column=2, row=6, sticky=(W, E))
-        Button(self.mainframe, text='Get bulbs from Q Station', command=self.callback_get_bulbs).grid(column=0, row=6, sticky=(W, E))
+        Button(self.mainframe, text='Set Values', command=self.callback_set_values).grid(column=2,
+                                                                                         row=6,
+                                                                                         sticky=(W, E))
+        Button(self.mainframe, text='Get bulbs from Q Station', command=self.callback_get_bulbs).grid(column=0,
+                                                                                                      row=6,
+                                                                                                      sticky=(W, E))
         self.color_button = Button(self.mainframe, text='Change Color', command=self.callback_set_color)
         self.color_button.grid(column=2, row=4, sticky=(W, E))
 
@@ -62,26 +66,35 @@ class App:
 
     def callback_set_color(self):
         if self.bulb_treeview.selection() != '' and self.item != 'bulbs':
-            self.color = askcolor(color=(int(self.response['led'][self.item_id]['r']), int(self.response['led'][self.item_id]['g']), int(self.response['led'][self.item_id]['b'])))
+            self.color = askcolor(color=(int(self.response['led'][self.item_id]['r']),
+                                         int(self.response['led'][self.item_id]['g']),
+                                         int(self.response['led'][self.item_id]['b'])))
             self.color_button.config(background=self.color[1])
         else:
-            showinfo('Info', 'Please select the bulb you want to control.')
+            showinfo('Info',
+                     'Please select the bulb you want to control.')
 
     def callback_set_values(self):
         if self.bulb_treeview.selection() != '' and self.item != 'bulbs':
             udp_client = UdpClient(self.ip.get(), 11600)
-            udp_client.set_light(self.bright_scale.get(), self.color[0][0], self.color[0][1], self.color[0][2], self.response['led'][self.item_id]['sn'])
-            if self.name.get() != self.response['led'][self.item_id]['title']:
-                udp_client.set_title(self.response['led'][self.item_id]['sn'], self.name.get())
+            udp_client.set_light(self.bright_scale.get(),
+                                 self.color[0][0],
+                                 self.color[0][1],
+                                 self.color[0][2],
+                                 self.response['led'][self.item_id]['sn'])
+            udp_client.set_title(self.response['led'][self.item_id]['sn'],
+                                 self.name.get())
         else:
-            showinfo('Info', 'Please select the bulb you want to control.')
+            showinfo('Info',
+                     'Please select the bulb you want to control.')
     
     def callback_get_bulbs(self):
         if self.ip.get() != '':
             udp_client = UdpClient(self.ip.get(), 11600)
             self.response = udp_client.get_lights()
 
-            map(self.bulb_treeview.delete, self.bulb_treeview.get_children())
+            map(self.bulb_treeview.delete,
+                self.bulb_treeview.get_children())
             self.bulb_treeview.insert('', 'end', 'bulbs', text='Q Station', open=True)
 
             for i in range(len(self.response['led'])):
@@ -90,7 +103,10 @@ class App:
                 else:
                     status = 'Off'
 
-                self.bulb_treeview.insert('bulbs', 'end', text=self.response['led'][i]['title'] + ' (' + status + ')', tag=self.response['led'][i]['sn'])
+                self.bulb_treeview.insert('bulbs',
+                                          'end',
+                                          text=self.response['led'][i]['title'] + ' (' + status + ')',
+                                          tag=self.response['led'][i]['sn'])
         else:
             showerror('Error', 'Please fill in the Q Station IP first.')
 
@@ -103,8 +119,13 @@ class App:
             self.name_entry.delete(0, END)
             self.name_entry.insert(0, self.response['led'][self.item_id]['title'])
             self.bright_scale.set(self.response['led'][self.item_id]['bright'])
-            self.color_button.config(background=self.rgb_to_hex((int(self.response['led'][self.item_id]['r']), int(self.response['led'][self.item_id]['g']), int(self.response['led'][self.item_id]['b']))))
-            self.color = (int(self.response['led'][self.item_id]['r']), int(self.response['led'][self.item_id]['g']), int(self.response['led'][self.item_id]['b']))
+            self.color_button.config(background=self.rgb_to_hex((int(self.response['led'][self.item_id]['r']),
+                                                                 int(self.response['led'][self.item_id]['g']),
+                                                                 int(self.response['led'][self.item_id]['b']))))
+            self.color = ((self.response['led'][self.item_id]['r'],
+                          self.response['led'][self.item_id]['g'],
+                          self.response['led'][self.item_id]['b']),
+                          '')
 
     def rgb_to_hex(self, rgb):
         return '#%02x%02x%02x' % rgb
