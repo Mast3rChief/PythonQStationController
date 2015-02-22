@@ -1,6 +1,6 @@
 from udp_client import *
 import sys
-if sys.version_info <= (3, 0):
+if sys.version_info < (3, 0):
     from Tkinter import *
     from tkMessageBox import *
     from tkColorChooser import askcolor
@@ -15,7 +15,7 @@ else:
 class App:
     def __init__(self):
         self.root = Tk()
-        self.root.title("Python Q Station Control")
+        self.root.title('Python Q Station Control')
         
         self.mainframe = Frame(self.root)
         self.mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
