@@ -1,14 +1,15 @@
 from udp_client import *
-import ttk
 import sys
 if sys.version_info <= (3, 0):
     from Tkinter import *
     from tkMessageBox import *
     from tkColorChooser import askcolor
+    import ttk as ttk
 else:
     from tkinter import *
     from tkinter.messagebox import *
     from tkinter.colorchooser import askcolor
+    import tkinter.ttk as ttk
 
 
 class App:
@@ -60,9 +61,11 @@ class App:
         self.root.mainloop()
 
     def callback_set_color(self):
-        self.color = askcolor(color=(int(self.response['led'][self.item_id]['r']), int(self.response['led'][self.item_id]['g']), int(self.response['led'][self.item_id]['b'])))
-
-        self.color_button.config(background=self.color[1])
+        if self.bulb_treeview.selection() != '' and self.item != 'bulbs':
+            self.color = askcolor(color=(int(self.response['led'][self.item_id]['r']), int(self.response['led'][self.item_id]['g']), int(self.response['led'][self.item_id]['b'])))
+            self.color_button.config(background=self.color[1])
+        else:
+            showinfo('Info', 'Please select the bulb you want to control.')
 
     def callback_set_values(self):
         if self.bulb_treeview.selection() != '' and self.item != 'bulbs':
@@ -101,7 +104,7 @@ class App:
             self.name_entry.insert(0, self.response['led'][self.item_id]['title'])
             self.bright_scale.set(self.response['led'][self.item_id]['bright'])
             self.color_button.config(background=self.rgb_to_hex((int(self.response['led'][self.item_id]['r']), int(self.response['led'][self.item_id]['g']), int(self.response['led'][self.item_id]['b']))))
-            self.color = ((int(self.response['led'][self.item_id]['r']), int(self.response['led'][self.item_id]['g']), int(self.response['led'][self.item_id]['b'])))
+            self.color = (int(self.response['led'][self.item_id]['r']), int(self.response['led'][self.item_id]['g']), int(self.response['led'][self.item_id]['b']))
 
     def rgb_to_hex(self, rgb):
         return '#%02x%02x%02x' % rgb
