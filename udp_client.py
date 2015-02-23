@@ -7,15 +7,12 @@ class UdpClient:
     def __init__(self, ip, port):
         self.ip = ip
         self.port = port
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     def send_request(self, cmd):
         try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            sock.sendto(cmd, (self.ip, self.port))
-            data = sock.recvfrom(2048)
-
-            print('Command: ' + cmd)
-            print('Answer: ' + data[0])
+            self.sock.sendto(cmd, (self.ip, self.port))
+            data = self.sock.recvfrom(2048)
 
             return data[0]
         except:
@@ -27,21 +24,13 @@ class UdpClient:
 
         data = self.send_request(cmd)
 
-    def get_lights(self):
-        cmd = '{"cmd":"light_list"}'
+    def set_title(self, sn, title):
+        cmd = '{"cmd":"set_title","sn":"' + sn + '","title":"' + title + '"}'
 
         data = self.send_request(cmd)
 
-        try:
-            json_data = json.loads(data)
-
-            return json_data
-        except:
-            print('JSON Parsing Error: ', sys.exc_info()[0])
-            raise
-
-    def set_title(self, sn, title):
-        cmd = '{"cmd":"set_title","sn":"' + sn + '","title":"' + title + '"}'
+    def get_lights(self):
+        cmd = '{"cmd":"light_list"}'
 
         data = self.send_request(cmd)
 
