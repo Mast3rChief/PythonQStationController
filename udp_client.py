@@ -20,7 +20,12 @@ class UdpClient:
             raise
 
     def set_light(self, bright, red, green, blue, active_bulb):
-        cmd = '{"cmd":"light_ctrl","bright":"' + str(bright) + '","g":"' + str(green) + '","b":"' + str(blue) + '","effect":"9","r":"' + str(red) + '","sn_list":[{"sn":"' + active_bulb + '"}],"matchValue":"0","iswitch":"1"}'
+        cmd = '{"cmd":"light_ctrl","bright":"' + str(bright) +\
+              '","g":"' + str(green) +\
+              '","b":"' + str(blue) +\
+              '","effect":"9","r":"' + str(red) +\
+              '","sn_list":[{"sn":"' + active_bulb +\
+              '"}],"matchValue":"0","iswitch":"1"}'
 
         data = self.send_request(cmd)
 
