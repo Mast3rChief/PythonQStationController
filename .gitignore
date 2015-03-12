@@ -1,4 +1,4 @@
 # IDE-metadata
 .idea
 *.pyc
-.q_station_server.py
+q_station_server.py
