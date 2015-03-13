@@ -25,10 +25,11 @@ class App:
         self.ip = StringVar()
         self.name = StringVar()
         self.color = ()
+        self.status = IntVar()
         self.response = StringVar()
         self.item = StringVar()
         self.item_id = IntVar()
-        
+
         self.bulb_treeview = ttk.Treeview(self.mainframe)
         self.bulb_treeview.grid(column=0, row=1, rowspan=5, sticky=(W, E))
         self.bulb_treeview.bind('<<TreeviewSelect>>', self.callback_bulb_treeview)
@@ -43,6 +44,9 @@ class App:
         self.bright_scale.set(0)
         self.bright_scale.grid(column=2, row=3, sticky=(N, W, E, S))
 
+        self.status_cb = Checkbutton(self.mainframe, variable=self.status).grid(column=2,
+                                                                          row=5,
+                                                                          sticky=(W, E))
         Button(self.mainframe, text='Set Values', command=self.callback_set_values).grid(column=2,
                                                                                          row=6,
                                                                                          sticky=(W, E))
@@ -56,6 +60,7 @@ class App:
         Label(self.mainframe, text='Name').grid(column=1, row=2, sticky=W)
         Label(self.mainframe, text='Brightness').grid(column=1, row=3, sticky=W)
         Label(self.mainframe, text='Color').grid(column=1, row=4, sticky=W)
+        Label(self.mainframe, text='Status').grid(column=1, row=5, sticky=W)
 
         for child in self.mainframe.winfo_children():
             child.grid_configure(padx=10, pady=5)
@@ -81,13 +86,14 @@ class App:
                                  self.color[0][0],
                                  self.color[0][1],
                                  self.color[0][2],
+                                 self.status,
                                  self.response['led'][self.item_id]['sn'])
             udp_client.set_title(self.response['led'][self.item_id]['sn'],
                                  self.name.get())
         else:
             showinfo('Info',
                      'Please select the bulb you want to control.')
-    
+
     def callback_get_bulbs(self):
         if self.ip.get() != '':
             udp_client = UdpClient(self.ip.get(), 11600)
@@ -118,7 +124,7 @@ class App:
 
             self.name_entry.delete(0, END)
             self.name_entry.insert(0, self.response['led'][self.item_id]['title'])
-            self.bright_scale.set(self.response['led'][self.item_id]['bright'])
+            self.bright_scale.set(int(self.response['led'][self.item_id]['bright']))
             self.color_button.config(background=self.rgb_to_hex((int(self.response['led'][self.item_id]['r']),
                                                                  int(self.response['led'][self.item_id]['g']),
                                                                  int(self.response['led'][self.item_id]['b']))))
@@ -126,6 +132,7 @@ class App:
                           self.response['led'][self.item_id]['g'],
                           self.response['led'][self.item_id]['b']),
                           '')
+            self.status.set(int(self.response['led'][self.item_id]['iswitch']))
 
     def rgb_to_hex(self, rgb):
         return '#%02x%02x%02x' % rgb

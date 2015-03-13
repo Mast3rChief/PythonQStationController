@@ -19,13 +19,18 @@ class UdpClient:
             print('UDP Connection Error: ', sys.exc_info()[0])
             raise
 
-    def set_light(self, bright, red, green, blue, active_bulb):
-        cmd = '{"cmd":"light_ctrl","bright":"' + str(bright) +\
-              '","g":"' + str(green) +\
-              '","b":"' + str(blue) +\
-              '","effect":"9","r":"' + str(red) +\
-              '","sn_list":[{"sn":"' + active_bulb +\
-              '"}],"matchValue":"0","iswitch":"1"}'
+    def set_light(self, bright, red, green, blue, status, active_bulb):
+        cmd = '{"cmd":"light_ctrl",' \
+              '"bright":"' + str(bright) + '",' \
+              '"g":"' + str(green) + '",' \
+              '"b":"' + str(blue) + '",' \
+              '"effect":"9",' \
+              '"r":"' + str(red) + '",' \
+              '"sn_list":[' \
+              '{"sn":"' + active_bulb + '"}' \
+              '],' \
+              '"matchValue":"0",' \
+              '"iswitch":"' + str(status) + '"}'
 
         data = self.send_request(cmd)
 
