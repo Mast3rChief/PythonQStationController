@@ -44,9 +44,9 @@ class App:
         self.bright_scale.set(0)
         self.bright_scale.grid(column=2, row=3, sticky=(N, W, E, S))
 
-        self.status_cb = Checkbutton(self.mainframe, variable=self.status).grid(column=2,
-                                                                          row=5,
-                                                                          sticky=(W, E))
+        Checkbutton(self.mainframe, variable=self.status).grid(column=2,
+                                                               row=5,
+                                                               sticky=(W, E))
         Button(self.mainframe, text='Set Values', command=self.callback_set_values).grid(column=2,
                                                                                          row=6,
                                                                                          sticky=(W, E))
@@ -60,7 +60,7 @@ class App:
         Label(self.mainframe, text='Name').grid(column=1, row=2, sticky=W)
         Label(self.mainframe, text='Brightness').grid(column=1, row=3, sticky=W)
         Label(self.mainframe, text='Color').grid(column=1, row=4, sticky=W)
-        Label(self.mainframe, text='Status').grid(column=1, row=5, sticky=W)
+        Label(self.mainframe, text='Status (On / Off)').grid(column=1, row=5, sticky=W)
 
         for child in self.mainframe.winfo_children():
             child.grid_configure(padx=10, pady=5)
@@ -86,7 +86,7 @@ class App:
                                  self.color[0][0],
                                  self.color[0][1],
                                  self.color[0][2],
-                                 self.status,
+                                 self.status.get(),
                                  self.response['led'][self.item_id]['sn'])
             udp_client.set_title(self.response['led'][self.item_id]['sn'],
                                  self.name.get())
@@ -105,9 +105,9 @@ class App:
 
             for i in range(len(self.response['led'])):
                 if int(self.response['led'][i]['online']) == 1:
-                    status = 'On'
+                    status = 'Online'
                 else:
-                    status = 'Off'
+                    status = 'Offline'
 
                 self.bulb_treeview.insert('bulbs',
                                           'end',

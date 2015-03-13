@@ -14,6 +14,8 @@ class UdpClient:
             self.sock.sendto(cmd, (self.ip, self.port))
             data = self.sock.recvfrom(2048)
 
+            print(cmd + ' : ' + data[0])
+
             return data[0]
         except:
             print('UDP Connection Error: ', sys.exc_info()[0])
@@ -21,16 +23,16 @@ class UdpClient:
 
     def set_light(self, bright, red, green, blue, status, active_bulb):
         cmd = '{"cmd":"light_ctrl",' \
-              '"bright":"' + str(bright) + '",' \
+              '"r":"' + str(red) + '",' \
               '"g":"' + str(green) + '",' \
               '"b":"' + str(blue) + '",' \
+              '"bright":"' + str(bright) + '",' \
               '"effect":"9",' \
-              '"r":"' + str(red) + '",' \
+              '"iswitch":"' + str(status) + '",' \
+              '"matchValue":"0",' \
               '"sn_list":[' \
               '{"sn":"' + active_bulb + '"}' \
-              '],' \
-              '"matchValue":"0",' \
-              '"iswitch":"' + str(status) + '"}'
+              ']}'
 
         data = self.send_request(cmd)
 
