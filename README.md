@@ -12,6 +12,10 @@ This is a small python script with a GUI to control your Q Station and Bulbs. At
 
 4. Set values of the lights as you wish
 
+##Screenshots
+
+![Screenshot of PythonQStationController](http://i.imgur.com/d5UgKSx.png)
+
 ##Credits
 
 * [QStation API Documentation](https://github.com/BelledsQ/QStation_API)
