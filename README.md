@@ -14,10 +14,14 @@ This is a small python script with a GUI to control your Q Station and Bulbs. At
 
 ##Screenshots
 
-![Screenshot of PythonQStationController](http://i.imgur.com/d5UgKSx.png)
+![Screenshot of PythonQStationController](http://i.imgur.com/Dl0V7E7.png)
 
 ##Credits
 
 * [QStation API Documentation](https://github.com/BelledsQ/QStation_API)
 
-* [Python](https://python.org)
+* [Python](https://www.python.org)
+
+* [Icon by Webdesignerdepot.com](http://www.webdesignerdepot.com/)
+
+* [Iconset by Famfamfam.com](http://www.famfamfam.com/)
