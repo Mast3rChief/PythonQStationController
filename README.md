@@ -14,7 +14,7 @@ This is a small python script with a GUI to control your Q Station and Bulbs. At
 
 ##Screenshots
 
-![Screenshot of PythonQStationController](http://i.imgur.com/d5UgKSx.png)
+![Screenshot of PythonQStationController](http://i.imgur.com/Dl0V7E7.png)
 
 ##Credits
 
