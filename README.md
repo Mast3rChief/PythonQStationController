@@ -20,4 +20,8 @@ This is a small python script with a GUI to control your Q Station and Bulbs. At
 
 * [QStation API Documentation](https://github.com/BelledsQ/QStation_API)
 
-* [Python](https://python.org)
+* [Python](https://www.python.org)
+
+* [Icon by Webdesignerdepot.com](http://www.webdesignerdepot.com/)
+
+* [Iconset by Famfamfam.com](http://www.famfamfam.com/)
