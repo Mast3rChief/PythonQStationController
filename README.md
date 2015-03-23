@@ -1,4 +1,4 @@
-# PythonQStation
+#Q Station Controller
 
 This is a small python script with a GUI to control your Q Station and Bulbs. At the moment it is possible to find the Q Station and control the connected Bulbs. You can change the bulbs name, color and brightness.
 
