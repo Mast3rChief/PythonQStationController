@@ -179,5 +179,9 @@ class App:
     def rgb_to_hex(self, rgb):
         return '#%02x%02x%02x' % rgb
 
+    def __del__(self):
+        with open('config.ini', 'w') as f:
+            self.config.write(f)
+
 if __name__ == '__main__':
     app = App()
