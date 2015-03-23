@@ -1,4 +1,5 @@
 # IDE-metadata
 .idea
+*.ini
 *.pyc
 q_station_server.py
