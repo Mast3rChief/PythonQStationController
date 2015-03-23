@@ -1,5 +1,6 @@
 from udp_client import *
 import sys
+from ConfigParser import SafeConfigParser
 if sys.version_info < (3, 0):
     from Tkinter import *
     from tkMessageBox import *
@@ -37,6 +38,14 @@ class App:
         self.response = StringVar()
         self.item = StringVar()
         self.item_id = IntVar()
+
+        self.config = SafeConfigParser()
+        self.config.read('config.ini')
+        print self.config.sections()
+        if any('last_Qstation' in sec for sec in self.config.sections()):
+            self.ip.set(self.config.get('last_Qstation', 'ip'))
+        else:
+            self.config.add_section('last_Qstation')
 
         self.bulb_treeview = ttk.Treeview(self.mainframe)
         self.bulb_treeview.heading("#0", text="Bulbs")
@@ -127,6 +136,8 @@ class App:
         if self.ip.get() != '':
             udp_client = UdpClient(self.ip.get(), self.PORT)
             self.response = udp_client.get_lights()
+
+            self.config.set('last_Qstation', 'ip', self.ip.get())
 
             map(self.bulb_treeview.delete, self.bulb_treeview.get_children())
             self.bulb_treeview.insert('', 'end', 'bulbs', text='Q Station', open=True)
