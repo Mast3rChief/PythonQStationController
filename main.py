@@ -181,7 +181,7 @@ class App:
         return '#%02x%02x%02x' % rgb
 
     def __del__(self):
-        with open('config.ini', 'w') as f:
+        with open(self.CONFIG_FILE, 'w') as f:
             self.config.write(f)
 
 if __name__ == '__main__':
