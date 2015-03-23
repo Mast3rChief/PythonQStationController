@@ -16,6 +16,7 @@ else:
 class App:
     BACKGROUND = '#efefef'
     PORT = 11600
+    CONFIG_FILE = 'config.ini'
 
     def __init__(self):
         self.root = Tk(className='Q Station Controller')
@@ -40,12 +41,12 @@ class App:
         self.item_id = IntVar()
 
         self.config = SafeConfigParser()
-        self.config.read('config.ini')
-        print self.config.sections()
-        if any('last_Qstation' in sec for sec in self.config.sections()):
-            self.ip.set(self.config.get('last_Qstation', 'ip'))
+        self.config.read(self.CONFIG_FILE)
+
+        if any('PythonQStationController' in sec for sec in self.config.sections()):
+            self.ip.set(self.config.get('PythonQStationController', 'last_ip'))
         else:
-            self.config.add_section('last_Qstation')
+            self.config.add_section('PythonQStationController')
 
         self.bulb_treeview = ttk.Treeview(self.mainframe)
         self.bulb_treeview.heading("#0", text="Bulbs")
@@ -137,7 +138,7 @@ class App:
             udp_client = UdpClient(self.ip.get(), self.PORT)
             self.response = udp_client.get_lights()
 
-            self.config.set('last_Qstation', 'ip', self.ip.get())
+            self.config.set('PythonQStationController', 'last_ip', self.ip.get())
 
             map(self.bulb_treeview.delete, self.bulb_treeview.get_children())
             self.bulb_treeview.insert('', 'end', 'bulbs', text='Q Station', open=True)
