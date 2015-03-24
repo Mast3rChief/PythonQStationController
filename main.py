@@ -143,6 +143,9 @@ class App:
 
             self.config.set(self.NAME, 'last_ip', self.ip.get())
 
+            with open(self.CONFIG_FILE, 'w') as f:
+                self.config.write(f)
+
             map(self.bulb_treeview.delete, self.bulb_treeview.get_children())
             self.bulb_treeview.insert('', 'end', 'bulbs', text='Q Station', open=True)
 
@@ -182,10 +185,6 @@ class App:
 
     def rgb_to_hex(self, rgb):
         return '#%02x%02x%02x' % rgb
-
-    def __del__(self):
-        with open(self.CONFIG_FILE, 'w') as f:
-            self.config.write(f)
 
 if __name__ == '__main__':
     app = App()
