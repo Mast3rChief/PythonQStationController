@@ -27,9 +27,9 @@ class UdpClient:
                 data = self.sock.recv(2048)
                 self.sock.close()
 
-                print(cmd + ' : ' + str(data[0].decode('UTF-8')))
+                print(cmd + ' : ' + str(data.decode('UTF-8')))
 
-                return str(data[0].decode('UTF-8'))
+                return str(data.decode('UTF-8'))
         except:
             print('UDP Connection Error: ', sys.exc_info()[0])
             raise
