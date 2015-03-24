@@ -1,15 +1,16 @@
 from udp_client import *
 import sys
-from ConfigParser import SafeConfigParser
 if sys.version_info < (3, 0):
     from Tkinter import *
     from tkMessageBox import *
     from tkColorChooser import askcolor
+    from ConfigParser import SafeConfigParser
     import ttk as ttk
 else:
     from tkinter import *
     from tkinter.messagebox import *
     from tkinter.colorchooser import askcolor
+    from configparser import SafeConfigParser
     import tkinter.ttk as ttk
 
 
