@@ -1,25 +1,29 @@
 from udp_client import *
 import sys
-from ConfigParser import SafeConfigParser
 if sys.version_info < (3, 0):
     from Tkinter import *
     from tkMessageBox import *
     from tkColorChooser import askcolor
+    from ConfigParser import SafeConfigParser
     import ttk as ttk
 else:
     from tkinter import *
     from tkinter.messagebox import *
     from tkinter.colorchooser import askcolor
+    from configparser import SafeConfigParser
     import tkinter.ttk as ttk
 
 
 class App:
+    NAME = 'PythonQStationController'
+    TITLE = 'Q Station Controller'
     BACKGROUND = '#efefef'
+    CONFIG_FILE = 'config.ini'
     PORT = 11600
 
     def __init__(self):
-        self.root = Tk(className='Q Station Controller')
-        self.root.title('Q Station Controller')
+        self.root = Tk(className=self.TITLE)
+        self.root.title(self.TITLE)
         self.root.resizable(0, 0)
         self.root.configure(background=self.BACKGROUND)
         icon = PhotoImage(file='icons/icon.gif')
@@ -31,6 +35,7 @@ class App:
         self.mainframe.rowconfigure(0, weight=1)
         self.mainframe.configure(background=self.BACKGROUND)
 
+        self.udp_client = NONE
         self.ip = StringVar()
         self.name = StringVar()
         self.color = ()
@@ -40,12 +45,12 @@ class App:
         self.item_id = IntVar()
 
         self.config = SafeConfigParser()
-        self.config.read('config.ini')
-        print self.config.sections()
-        if any('last_Qstation' in sec for sec in self.config.sections()):
-            self.ip.set(self.config.get('last_Qstation', 'ip'))
+        self.config.read(self.CONFIG_FILE)
+
+        if any(self.NAME in sec for sec in self.config.sections()):
+            self.ip.set(self.config.get(self.NAME, 'last_ip'))
         else:
-            self.config.add_section('last_Qstation')
+            self.config.add_section(self.NAME)
 
         self.bulb_treeview = ttk.Treeview(self.mainframe)
         self.bulb_treeview.heading("#0", text="Bulbs")
@@ -120,24 +125,26 @@ class App:
 
     def callback_set_values(self):
         if self.bulb_treeview.selection() != '' and self.item != 'bulbs':
-            udp_client = UdpClient(self.ip.get(), self.PORT)
-            udp_client.set_light(self.bright_scale.get(),
-                                 self.color[0][0],
-                                 self.color[0][1],
-                                 self.color[0][2],
-                                 self.status.get(),
-                                 self.response['led'][self.item_id]['sn'])
-            udp_client.set_title(self.response['led'][self.item_id]['sn'],
-                                 self.name.get())
+            self.udp_client.set_light(self.bright_scale.get(),
+                                      self.color[0][0],
+                                      self.color[0][1],
+                                      self.color[0][2],
+                                      self.status.get(),
+                                      self.response['led'][self.item_id]['sn'])
+            self.udp_client.set_title(self.response['led'][self.item_id]['sn'],
+                                      self.name.get())
         else:
             showinfo('Info', 'Please select the bulb you want to control.')
 
     def callback_get_bulbs(self):
         if self.ip.get() != '':
-            udp_client = UdpClient(self.ip.get(), self.PORT)
-            self.response = udp_client.get_lights()
+            self.udp_client = UdpClient(self.ip.get(), self.PORT)
+            self.response = self.udp_client.get_lights()
 
-            self.config.set('last_Qstation', 'ip', self.ip.get())
+            self.config.set(self.NAME, 'last_ip', self.ip.get())
+
+            with open(self.CONFIG_FILE, 'w') as f:
+                self.config.write(f)
 
             map(self.bulb_treeview.delete, self.bulb_treeview.get_children())
             self.bulb_treeview.insert('', 'end', 'bulbs', text='Q Station', open=True)
@@ -178,10 +185,6 @@ class App:
 
     def rgb_to_hex(self, rgb):
         return '#%02x%02x%02x' % rgb
-
-    def __del__(self):
-        with open('config.ini', 'w') as f:
-            self.config.write(f)
 
 if __name__ == '__main__':
     app = App()
