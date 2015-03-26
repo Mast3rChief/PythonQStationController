@@ -6,11 +6,11 @@ This is a small python script with a GUI to control your Belleds Q Station and B
 
 1. Download the source code from github or clone it with git
 
-    git clone https://github.com/Mast3rChief/PythonQStationController.git
+    > git clone https://github.com/Mast3rChief/PythonQStationController.git
 
 2. Run main.py to pull up the UI for the Q Station Controller.
 
-    python main.py
+    > python main.py
 
 3. Enter the IP Address of your Q Station (can be found on your routers interface)
 
