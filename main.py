@@ -158,7 +158,7 @@ class App:
                 self.bulb_treeview.insert('bulbs',
                                           'end',
                                           text=self.response['led'][i]['title'] + ' (' + status + ')',
-                                          tag=self.response['led'][i]['sn'])
+                                          tag=i)
 
             for child in self.labelframe.winfo_children():
                 child.configure(state='normal')
@@ -169,7 +169,7 @@ class App:
         self.item = self.bulb_treeview.selection()[0]
 
         if self.item != 'bulbs':
-            self.item_id = int(self.bulb_treeview.selection()[0][3]) - 1
+            self.item_id = int(self.bulb_treeview.item(self.bulb_treeview.focus())['tags'][0])
 
             self.name_entry.delete(0, END)
             self.name_entry.insert(0, self.response['led'][self.item_id]['title'])
