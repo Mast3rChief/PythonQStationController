@@ -118,8 +118,10 @@ class App:
 
     def callback_set_color(self):
         if self.bulb_treeview.selection() != '' and self.item != 'bulbs':
-            self.color = askcolor(color=(int(self.color[0][0]), int(self.color[0][1]), int(self.color[0][2])))
-            self.color_button.config(background=self.color[1])
+            tempcolor = askcolor(color=(int(self.color[0][0]), int(self.color[0][1]), int(self.color[0][2])))
+            if tempcolor[1] is not None:
+                self.color = tempcolor 
+                self.color_button.config(background=self.color[1])
         else:
             showinfo('Info', 'Please select the bulb you want to control.')
 
@@ -133,6 +135,7 @@ class App:
                                       self.response['led'][self.item_id]['sn'])
             self.udp_client.set_title(self.response['led'][self.item_id]['sn'],
                                       self.name.get())
+            self.callback_get_bulbs()
         else:
             showinfo('Info', 'Please select the bulb you want to control.')
 
