@@ -19,7 +19,7 @@ class UdpClient:
                 data = self.sock.recvfrom(2048)
                 self.sock.close()
 
-                print(cmd + ' : ' + data[0])
+                # print(cmd + ' : ' + data[0])
 
                 return data[0]
             else:
@@ -27,7 +27,7 @@ class UdpClient:
                 data = self.sock.recv(2048)
                 self.sock.close()
 
-                print(cmd + ' : ' + str(data.decode('UTF-8')))
+                # print(cmd + ' : ' + str(data.decode('UTF-8')))
 
                 return str(data.decode('UTF-8'))
         except:
