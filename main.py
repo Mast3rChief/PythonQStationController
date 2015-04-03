@@ -73,12 +73,18 @@ class App:
         self.labelframe = LabelFrame(self.mainframe, text='Bulb Settings')
         self.labelframe.grid(column=1, columnspan=3, row=1, sticky=(N, W, E, S))
 
+        Label(self.labelframe, text='Name').grid(column=1, row=1, sticky=W)
+
         self.name_entry = Entry(self.labelframe, textvariable=self.name)
-        self.name_entry.grid(column=2, columnspan=2, row=1, sticky=(W, E))
+        self.name_entry.grid(column=2, row=1, sticky=(W, E))
+
+        Label(self.labelframe, text='Brightness').grid(column=1, row=3, sticky=W)
         
         self.bright_scale = Scale(self.labelframe, from_=0, to=255, orient=HORIZONTAL)
         self.bright_scale.set(0)
-        self.bright_scale.grid(column=2, columnspan=2, row=3, sticky=(N, W, E, S))
+        self.bright_scale.grid(column=2, row=3, sticky=(N, W, E, S))
+
+        Label(self.labelframe, text='Status').grid(column=1, row=2, sticky=W)
 
         Checkbutton(self.labelframe, text=' Turn the bulb on or off', variable=self.status).grid(column=2,
                                                                                                  columnspan=2,
@@ -87,20 +93,13 @@ class App:
 
         img_accept = PhotoImage(file='icons/accept.gif')
         Button(self.labelframe, text='Set Values', command=self.callback_set_values, image=img_accept,
-               compound=LEFT).grid(column=1, columnspan=3, row=5, sticky=(W, E))
+               compound=LEFT).grid(column=1, columnspan=2, row=5, sticky=(W, E))
 
-        self.color_button = Button(self.labelframe, command=self.callback_set_color)
-        self.color_button.grid(column=2, row=4, sticky=(W, E))
+        Label(self.labelframe, text='Color').grid(column=1, row=4, sticky=W)
 
         img_color = PhotoImage(file='icons/color_wheel.gif')
-        Button(self.labelframe, command=self.callback_set_color, image=img_color, height=22).grid(column=3,
-                                                                                                  row=4,
-                                                                                                  sticky=(W, E))
-
-        Label(self.labelframe, text='Name').grid(column=1, row=1, sticky=W)
-        Label(self.labelframe, text='Status').grid(column=1, row=2, sticky=W)
-        Label(self.labelframe, text='Brightness').grid(column=1, row=3, sticky=W)
-        Label(self.labelframe, text='Color').grid(column=1, row=4, sticky=W)
+        self.color_button = Button(self.labelframe, command=self.callback_set_color, image=img_color)
+        self.color_button.grid(column=2, row=4, sticky=(W, E))
 
         for child in self.mainframe.winfo_children():
             try:
