@@ -70,6 +70,8 @@ class App:
         img_connect = PhotoImage(file='icons/arrow_refresh.gif')
         Button(self.mainframe, command=self.callback_get_bulbs, image=img_connect).grid(column=3, row=0, sticky=(W, E))
 
+        Button(self.mainframe, command=self.callback_get_groups, image=img_connect).grid(column=3, row=10, sticky=(W, E))
+
         self.labelframe = LabelFrame(self.mainframe, text='Bulb Settings')
         self.labelframe.grid(column=1, columnspan=3, row=1, sticky=(N, W, E, S))
 
@@ -168,6 +170,40 @@ class App:
                 self.bulb_treeview.insert('bulbs',
                                           'end',
                                           text=self.response['led'][i]['title'] + ' (' + status + ')',
+                                          tag=i)
+
+            for child in self.labelframe.winfo_children():
+                child.configure(state='normal')
+        else:
+            showerror('Error', 'Please fill in the Q Station IP first.')
+
+    def callback_get_groups(self):
+        if self.ip.get() != '':
+            self.udp_client = UdpClient(self.ip.get(), self.PORT)
+            self.groups = self.udp_client.get_groups()
+            self.lights = self.udp_client.get_groups()
+
+            self.config.set(self.NAME, 'last_ip', self.ip.get())
+
+            with open(self.CONFIG_FILE, 'w') as f:
+                self.config.write(f)
+
+            print self.groups['data'][0]['group_title'], self.groups['data'][0]['group_id']
+            
+            # map(self.bulb_treeview.delete, self.bulb_treeview.get_children())
+
+
+            for i in range(len(self.groups['data'])):
+                self.bulb_treeview.insert('', 'end', 'groups', text=self.groups['data'][i]['group_title'], open=True)
+                # has to be adjusted for each element of the group
+                # if int(self.response['led'][i]['online']) == 1:
+                #     status = 'Online'
+                # else:
+                #     status = 'Offline'
+                for n in range(len(self.groups['data'])):
+                self.bulb_treeview.insert('groups',
+                                          'end',
+                                          text=self.groups['data'][i]['group_title'],
                                           tag=i)
 
             for child in self.labelframe.winfo_children():

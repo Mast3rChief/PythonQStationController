@@ -1,3 +1,4 @@
+from udp_client import *
 import socket
 import sys
 import json
@@ -82,7 +83,7 @@ class UdpClient:
 
     def get_group_lights(self, group_id):
         cmd = '{"cmd":"group_leds_list",' \
-              '"group_id":' + group_id + '"}'
+              '"group_id":"' + group_id + '"}'
 
         data = self.send_request(cmd)
 
@@ -93,3 +94,72 @@ class UdpClient:
         except:
             print('JSON Parsing Error: ', sys.exc_info()[0])
             raise
+
+class QStation:
+	PORT = 11600
+	def __init__(self):
+		self.ip = '0'
+		self.bulb = []
+		self.group = []
+		self.group_elements = []
+		try:
+			self.ip = socket.gethostbyname('bellnet')
+		except:
+			print 'Error', 'Could not find QStation!'
+
+		self.get_bulbs(self.ip)
+		self.get_groups(self.ip)
+
+	def get_bulbs(self, ip):
+		self.udp_client = UdpClient(self.ip, self.PORT)
+		self.output = self.udp_client.get_lights()
+		
+		bulb_num = len(self.output['led'])
+		self.bulbs = [Bulb(self.output['led'][i]) for i in range(bulb_num)]
+
+	def get_groups(self, ip):
+		self.udp_client = UdpClient(self.ip, self.PORT)
+		self.groups = self.udp_client.get_groups()
+
+		group_num = len(self.groups['data'])
+		self.group = [Group(self.groups['data'][i], self.udp_client.get_group_lights(self.groups['data'][i]['group_id'])['data']) for i in range(group_num)]
+
+	def show(self):
+		for item in self.bulbs:
+			item.show()
+
+		for item in self.group:
+			item.show()
+
+class Group:
+	def __init__(self, settings, elements):
+		self.settings = settings
+		self.elements = []
+		for bulb in elements:
+			if 'status' in bulb and bulb['status'] == '1':
+				self.elements.append(bulb['sn'])
+
+	def get_list(self):
+
+	def add2list(self, sn):
+
+	def rmv(self, sn):
+
+	def switch(self, bright, angle):
+
+	def switch_status(self):
+
+	def show(self):
+		print self.settings['group_id'], self. settings['group_title']
+		print self.elements
+
+class Bulb:
+	def __init__(self, settings):
+		self.settings = settings
+
+	def switch(self, bright, angle):
+
+	def switch_status(self):
+
+	def show(self):
+		print self.settings['sn'], self.settings['title']
