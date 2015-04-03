@@ -51,7 +51,6 @@ class App:
 
         try:
             self.ip.set(socket.gethostbyname('belllnet'))
-            print 'Automaticly found QStation'
         except:
             if any(self.NAME in sec for sec in self.config.sections()):
                 self.ip.set(self.config.get(self.NAME, 'last_ip'))
