@@ -1,5 +1,7 @@
 from udp_client import *
 import sys
+import socket
+
 if sys.version_info < (3, 0):
     from Tkinter import *
     from tkMessageBox import *
@@ -47,10 +49,14 @@ class App:
         self.config = SafeConfigParser()
         self.config.read(self.CONFIG_FILE)
 
-        if any(self.NAME in sec for sec in self.config.sections()):
-            self.ip.set(self.config.get(self.NAME, 'last_ip'))
-        else:
-            self.config.add_section(self.NAME)
+        try:
+            self.ip.set(socket.gethostbyname('belllnet'))
+            print 'Automaticly found QStation'
+        except:
+            if any(self.NAME in sec for sec in self.config.sections()):
+                self.ip.set(self.config.get(self.NAME, 'last_ip'))
+            else:
+                self.config.add_section(self.NAME)
 
         self.bulb_treeview = ttk.Treeview(self.mainframe)
         self.bulb_treeview.heading("#0", text="Bulbs")
@@ -71,7 +77,7 @@ class App:
         self.name_entry = Entry(self.labelframe, textvariable=self.name)
         self.name_entry.grid(column=2, columnspan=2, row=1, sticky=(W, E))
         
-        self.bright_scale = Scale(self.labelframe, from_=0, to=100, orient=HORIZONTAL)
+        self.bright_scale = Scale(self.labelframe, from_=0, to=255, orient=HORIZONTAL)
         self.bright_scale.set(0)
         self.bright_scale.grid(column=2, columnspan=2, row=3, sticky=(N, W, E, S))
 
@@ -111,6 +117,9 @@ class App:
                 child.configure(state='disable')
             except:
                 pass
+
+        if self.ip.get():
+            self.callback_get_bulbs()
 
         self.ip_entry.focus()
 
