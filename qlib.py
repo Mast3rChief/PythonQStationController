@@ -27,7 +27,7 @@ class UdpClient:
 
 				# print(cmd + ' : ' + data[0])
 
-				return data[0]
+				return json.loads(data[0])
 			else:
 				self.sock.sendall(cmd.encode('UTF-8'))
 				data = self.sock.recv(2048)
@@ -35,16 +35,9 @@ class UdpClient:
 
 				# print(cmd + ' : ' + str(data.decode('UTF-8')))
 
-			out = str(data.decode('UTF-8'))
+				return json.loads(data.decode('UTF-8'))
 		except:
 			print('UDP Connection Error: ', sys.exc_info()[0])
-			raise
-
-		try:
-			json_data = json.loads(out)
-			return json_data
-		except:
-			print('JSON Parsing Error: ', sys.exc_info()[0])
 			raise
 
 	def set_light(self, *arguments):
@@ -134,15 +127,13 @@ class QStation:
 		self.get_groups()
 
 	def get_bulbs(self):
-		print self.udp_client
 		self.output = self.udp_client.get_lights()
-		print self.output
-		print self.output['led']
-		self.bulbs = [ Bulb( self.output['led'][i] ) for i in range( len(self.output['led']) ) ]
+		print self.output['led'][1]
+		self.bulbs = [Bulb(self.output['led'][i]) for i in range(len(self.output['led']))]
 
 	def get_groups(self):
 		self.groups = self.udp_client.get_groups()
-		self.group = [Group(self.groups['data'][i], self.udp_client.get_group_lights(self.groups['data'][i]['group_id'])['data']) for i in range(self.groups['data'])]
+		self.group = [Group(self.groups['data'][i], self.udp_client.get_group_lights(self.groups['data'][i]['group_id'])['data']) for i in range(len(self.groups['data']))]
 
 	def create_group(self, name):
 		self.udp_client.create_group(name)
