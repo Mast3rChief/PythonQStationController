@@ -128,10 +128,11 @@ class QStation:
 
 	def get_bulbs(self):
 		self.output = self.udp_client.get_lights()
-		print self.output['led'][1]
-		self.bulbs = [Bulb(self.output['led'][i]) for i in range(len(self.output['led']))]
+		print 'Getting Bulbs'
+		self.bulbs = [Bulb(self.output['led'][i]) for i in range(len(self.output['led']))]#
 
 	def get_groups(self):
+		print 'Getting Groups'
 		self.groups = self.udp_client.get_groups()
 		self.group = [Group(self.groups['data'][i], self.udp_client.get_group_lights(self.groups['data'][i]['group_id'])['data']) for i in range(len(self.groups['data']))]
 
@@ -145,8 +146,8 @@ class QStation:
 	def show(self):
 		for item in self.bulbs:
 			item.show()
-		for item in self.group:
-			item.show()
+		#for item in self.group:
+		#	item.show()
 
 class Group:
 	def __init__(self, settings, elements):
@@ -173,7 +174,7 @@ class Group:
 		return True
 
 	def show(self):
-		print self.settings['group_id'], self.settings['group_title']
+		print self.settings['group_id']#, self.settings['group_title']
 		print self.elements
 
 	def delete(self):
@@ -190,4 +191,5 @@ class Bulb:
 		return True
 
 	def show(self):
-		print self.settings['sn'], self.settings['title']
+		return self.settings
+		print self.settings['sn']#, self.settings['title']
