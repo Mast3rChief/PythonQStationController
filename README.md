@@ -1,5 +1,7 @@
 #Q Station Controller
 
+# Due to some bugs in the code the app doesn't work at the moment. Will be fixed soon.
+
 This is a small python script with a GUI to control your Belleds Q Station and Bulbs. At the moment it is possible to connect to the Belleds Q Station and control the connected Bulbs. You can change the bulbs name, color and brightness.
 
 ##Instructions
